@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verbes irréguliers – Collège</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #eef1f4;
+    margin: 0;
+    padding: 15px;
+}
+h1 {
+    text-align: center;
+}
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+input {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    font-size: 18px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+button {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    background: #2e86de;
+    color: white;
+}
+.result {
+    margin-top: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+.stats {
+    margin-top: 10px;
+    text-align: center;
+}
+.bad {
+    color: #c0392b;
+}
+.good {
+    color: #27ae60;
+}
+</style>
+</head>
+
+<body>
+
+<h1>📘 Verbes irréguliers</h1>
+
+<div class="card">
+    <p><strong>Base verbale :</strong> <span id="base"></span></p>
+
+    <input id="pret" placeholder="Prétérit">
+    <input id="part" placeholder="Participe passé">
+
+    <button onclick="check()">Valider</button>
+
+    <div class="result" id="result"></div>
+    <div class="stats">
+        ✔️ <span id="ok">0</span> |
+        ❌ <span id="ko">0</span>
+    </div>
+</div>
+
+<script>
+let verbs = [
+ {b:"be", p:"was / were", pp:"been"},
+ {b:"go", p:"went", pp:"gone"},
+ {b:"make", p:"made", pp:"made"},
+ {b:"cut", p:"cut", pp:"cut"},
+ {b:"put", p:"put", pp:"put"},
+ {b:"sell", p:"sold", pp:"sold"},
+ {b:"buy", p:"bought", pp:"bought"},
+ {b:"think", p:"thought", pp:"thought"},
+ {b:"meet", p:"met", pp:"met"},
+ {b:"leave", p:"left", pp:"left"},
+ {b:"forbid", p:"forbade", pp:"forbidden"},
+ {b:"swim", p:"swam", pp:"swum"}
+];
+
+let current;
+let ok = 0;
+let ko = 0;
+
+function nextVerb() {
+    current = verbs[0];
+    document.getElementById("base").textContent = current.b;
+    document.getElementById("pret").value = "";
+    document.getElementById("part").value = "";
+    document.getElementById("result").textContent = "";
+}
+
+function check() {
+    let pret = document.getElementById("pret").value.trim().toLowerCase();
+    let part = document.getElementById("part").value.trim().toLowerCase();
+
+    if (pret === current.p.toLowerCase() && part === current.pp.toLowerCase()) {
+        document.getElementById("result").textContent = "✔️ Correct";
+        document.getElementById("result").className = "result good";
+        ok++;
+        verbs.push(verbs.shift()); // verbe maîtrisé → fin de liste
+    } else {
+        document.getElementById("result").textContent =
+        "❌ " + current.p + " / " + current.pp;
+        document.getElementById("result").className = "result bad";
+        ko++;
+        verbs.splice(2, 0, verbs.shift()); // verbe raté revient vite
+    }
+
+    document.getElementById("ok").textContent = ok;
+    document.getElementById("ko").textContent = ko;
+
+    setTimeout(nextVerb, 1500);
+}
+
+nextVerb();
+</script>
